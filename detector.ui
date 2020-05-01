@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Detector</class>
+ <widget class="QWidget" name="Detector">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>861</width>
+    <height>620</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QGraphicsView" name="grfVw">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>180</y>
+     <width>391</width>
+     <height>401</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_detector">
+   <property name="geometry">
+    <rect>
+     <x>21</x>
+     <y>21</y>
+     <width>87</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Detector</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="lbl_startAngle">
+        <property name="text">
+         <string>starting angle</string>
+        </property>
+        <property name="buddy">
+         <cstring>lnE_startAngle</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lnE_startAngle">
+        <property name="text">
+         <string>-0.57</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="lbl_EndAngle">
+        <property name="text">
+         <string>ending angle</string>
+        </property>
+        <property name="buddy">
+         <cstring>lnE_endAngle</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lnE_endAngle">
+        <property name="text">
+         <string>-5</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pshBtn_setAngle">
+      <property name="text">
+       <string>set angles</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="lbl_tracedPlot">
+   <property name="geometry">
+    <rect>
+     <x>432</x>
+     <y>157</y>
+     <width>100</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Picture</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QCustomPlot" name="wdgt_tracedPlot" native="true">
+   <property name="geometry">
+    <rect>
+     <x>432</x>
+     <y>185</y>
+     <width>400</width>
+     <height>400</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>400</width>
+     <height>400</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_requiredPlot">
+   <property name="geometry">
+    <rect>
+     <x>23</x>
+     <y>157</y>
+     <width>114</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Map</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

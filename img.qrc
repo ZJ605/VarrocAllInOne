@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>lb.png</file>
+        <file>GLoad.PNG</file>
+        <file>GClose.PNG</file>
+        <file>GSave.PNG</file>
+        <file>models/monkey.ply</file>
+        <file>shaders/phong.vert</file>
+        <file>shaders/phong.frag</file>
+        <file>GTtransformXY.PNG</file>
+        <file>NsetNurb.PNG</file>
+        <file>GCreate.PNG</file>
+        <file>shaders/coord.vert</file>
+        <file>shaders/coord.frag</file>
+        <file>TTracer.PNG</file>
+        <file>SSource.PNG</file>
+        <file>shaders/sourceShader.vert</file>
+        <file>shaders/sourceShader.frag</file>
+        <file>TStart.PNG</file>
+        <file>TRays.PNG</file>
+    </qresource>
+</RCC>
