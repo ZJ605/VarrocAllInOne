@@ -4,15 +4,16 @@
 
 using namespace cv;
 
-Detector::Detector(Tracer *t, QWidget *parent) : QWidget(parent), ui(new Ui::Detector), tracer(t), step(0.05),horCoord1(-20), horCoord2(20), vertCoord1(-15), vertCoord2(15)
+Detector::Detector(QWidget *parent) : QWidget(parent), ui(new Ui::Detector), step(0.1),horCoord1(-15), horCoord2(15), vertCoord1(-10), vertCoord2(10)
 {
     ui->setupUi(this);
 
     prepareDetector();
-    connect(tracer,&Tracer::raysTraced,this,&Detector::geometryTraced);
+    //connect(tracer,&Tracer::raysTraced,this,&Detector::geometryTraced);
 
     ui->grfVw->setScene(new QGraphicsScene(this));
     ui->grfVw->scene()->addItem(&pixmap);
+
     //drawPlot();
 }
 
@@ -38,52 +39,13 @@ void Detector::drawPlot()
 
 }
 
-void Detector::geometryTraced()
-{
-    float u0 = -10;
-    float u1 = 10;
-    float step = 0.1;
-    double max = 0;
-    int count = (u1-u0)/step + 1;
-    QVector<double> x(count),y(count);
-    for (int i = 0;i<count;i++) {
-        x[i] = double(u0 + i*step);
-        y[i] = double(0);
-    }
-
-    for (int i = 0;i<tracer->getReflectedRays().count();i++) {
-        float degree = qAcos(tracer->getReflectedRays().at(i).getDirection().x())*180.0/3.141592653;
-        if (u0<=degree&&degree<=u1){
-            int index = qFloor(10.0*(degree - u0));
-            y[index]+=tracer->getReflectedRays().at(i).getWeight();
-            if (max<y[index])
-                max = y[index];
-
-        }
-    }
-
-    ui->wdgt_tracedPlot->addGraph();
-    ui->wdgt_tracedPlot->graph(0)->setData(x, y);
-    ui->wdgt_tracedPlot->graph(0)->setPen(QPen(Qt::green));
-    ui->wdgt_tracedPlot->xAxis->setLabel("x");
-    ui->wdgt_tracedPlot->yAxis->setLabel("y");
-    ui->wdgt_tracedPlot->xAxis->setRange(u0, u1);
-    ui->wdgt_tracedPlot->yAxis->setRange(0, max+1);
-    ui->wdgt_tracedPlot->replot();
-}
-
 void Detector::projectRaysOnDetector(QVector<Ray>& rs)
 {
     foreach (Ray r, rs) {
         double angleY = 180/M_PI*QVector3D::dotProduct(QVector3D(0,1,0), r.getDirection()); //projekce do z - horizontalni souradnice
         double angleZ = 180/M_PI*QVector3D::dotProduct(QVector3D(0,0,1), r.getDirection());//projekce do y - vertikalni souradnice
-        //qDebug()<<"angle z rad"<<QVector3D::dotProduct(QVector3D(0,0,1), r.getDirection());
-        //qDebug()<<"angle y rad"<<QVector3D::dotProduct(QVector3D(0,1,0), r.getDirection());
-        //qDebug()<<"angle z"<<angleZ;
-        //qDebug()<<"angle y"<<angleY;
         int col = binarySearch(hor,angleZ);
         int row = binarySearch(ver,angleY);
-        //qDebug()<<"row"<<row<<"col"<<col;
         if (col<0 || row < 0){
             //qDebug()<<"out of map";
             continue;
@@ -99,38 +61,24 @@ void Detector::projectRaysOnDetector(QVector<Ray>& rs)
     for (int i = 0;i<detectorV.count();i++) {
         for (int j = 0;j<detectorV[0].count();j++) {
             detector.at<uchar>(i,j) = (detectorV[i][j]*255/max);
-
-            /*
-            if (detectorV[i][j]*255/max!=0){
-                qDebug()<<"i"<<i;
-                qDebug()<<"j"<<j;
-            }
-            */
         }
     }
-    /*
-    for (int i = 0;i<detectorV[0].count();i++) {
-        qDebug()<<detector.at<uchar>(100,i);
-        //qDebug()<<qFloor(detectorV[30][i]*255/max);
-    }
-    */
     if (detector.empty())
         qDebug()<<"empty";
 
     pixmap.setPixmap(QPixmap::fromImage(putImage(detector)));
-    //ui->gV->fitInView(&pixmap,Qt::KeepAspectRatio);
     this->update();
-    //emit detectorUpdated(detector);
 }
 
-void Detector::projectChipOnDetector(QVector<Ray> &rs)
+void Detector::projectChipOnDetector(const QVector<Ray> &rs)
 {
+    int outRays = 0;
     if (rs.count()%4 != 0){
         qDebug()<<"parpsky nedelitelne 4";
         return;
     }
     float sum = 0;
-    qDebug()<<"pocet parsku"<<rs.count();
+    //qDebug()<<"pocet parsku"<<rs.count();
     for (int i = 4; i<rs.count(); i = i+4){
         double angleY1 = 180/M_PI*QVector3D::dotProduct(QVector3D(0,1,0), rs.at(i).getDirection()); //projekce do z - horizontalni souradnice
         double angleZ1 = 180/M_PI*QVector3D::dotProduct(QVector3D(0,0,1), rs.at(i).getDirection());//projekce do y - vertikalni souradnice
@@ -146,11 +94,10 @@ void Detector::projectChipOnDetector(QVector<Ray> &rs)
         points.append(detectorPoint(binarySearch(hor,angleZ2),binarySearch(ver,angleY2),rs.at(i+1).getWeight()));
         points.append(detectorPoint(binarySearch(hor,angleZ3),binarySearch(ver,angleY3),rs.at(i+2).getWeight()));
         points.append(detectorPoint(binarySearch(hor,angleZ4),binarySearch(ver,angleY4),rs.at(i+3).getWeight()));
-        //qDebug()<<"pred"<<points.at(0).h<<" "<<points.at(0).v<<" "<<points.at(1).h<<" "<<points.at(1).v<<" "<<points.at(2).h<<points.at(2).v<<" "<<" "<<points.at(3).h<<points.at(3).v<<" ";
-
         if (points.at(0).h<0||points.at(0).v<0||points.at(1).h<0||points.at(1).v<0||points.at(2).h<0||points.at(2).v<0||points.at(3).h<0||points.at(3).v<0){
-            qDebug()<<"not in map -detector/project chip on detector";
-            qDebug()<<"rays out of map"<<points[0].h<<points[0].v<<"/"<<points[1].h<<points[1].v<<"/"<<points[2].h<<points[2].v<<"/"<<points[3].h<<points[3].v;
+            //qDebug()<<"not in map -detector/project chip on detector";
+            //qDebug()<<"rays out of map"<<points[0].h<<points[0].v<<"/"<<points[1].h<<points[1].v<<"/"<<points[2].h<<points[2].v<<"/"<<points[3].h<<points[3].v;
+            outRays++;
             continue;
         }
         reorderProjectedPoints(points);
@@ -178,7 +125,7 @@ void Detector::projectChipOnDetector(QVector<Ray> &rs)
                     sum +=1;
                 }
                 else {
-                    qDebug()<<"point not in polygon"<<i<<" "<<j;
+                    //qDebug()<<"point not in polygon"<<i<<" "<<j;
                 }
             }
         }
@@ -188,20 +135,33 @@ void Detector::projectChipOnDetector(QVector<Ray> &rs)
         return;
     if (detectorV[0].count()==0)
         return;
-
+    int counter = 0;
     float max = 0;
     for (int i = 0;i<detectorV.count();i++) {
         for (int j = 0;j<detectorV[0].count();j++) {
-            //detector.at<uchar>(i,j) = qFloor((detectorV[i][j]));
-            if (detectorV[i][j]>max)
+            if (detectorV[i][j]>max){
                 max = detectorV[i][j];
+                counter++;
+            }
         }
     }
-    max*=1000/max;
+    //qDebug()<<"max"<<max;
+
+    max=200.0f/max;
+    //qDebug()<<"max"<<max;
+    /*
+    for (int i = 0;i<detectorV.count();i++) {
+        for (int j = 0;j<detectorV[0].count();j++) {
+            //detectorV[i][j]=detectorV[i][j]*max;
+            detectorV[i][j]=detectorV[i][j]*10000;
+        }
+    }
+    */
     for (int i = 0;i<detectorV.count();i++) {
         for (int j = 0;j<detectorV[0].count();j++) {
             detectorV[i][j] = detectorV[i][j]*max;
             detector.at<uchar>(i,j) = qFloor((detectorV[i][j]));
+            //detector.at<uchar>(i,j) = 270;
         }
     }
     if (detector.empty())
@@ -209,6 +169,8 @@ void Detector::projectChipOnDetector(QVector<Ray> &rs)
 
     pixmap.setPixmap(QPixmap::fromImage(putImage(detector)));
     ui->grfVw->fitInView(&pixmap,Qt::KeepAspectRatio);
+    //qDebug()<<"rays count"<<rs.count();
+    //qDebug()<<"rays out"<<outRays;
     this->update();
 }
 

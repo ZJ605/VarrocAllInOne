@@ -16,7 +16,8 @@ GeometryViewer::GeometryViewer(QWidget* parent):QWidget (parent)
     geomModel = new GeometryModel(this);
     geomScene = new GeometryScene();
     tracer = new Tracer();
-    source = new Source();
+    source = new Source(this, 1, 3);
+
     createLayout();
 
     connect(this, &GeometryViewer::geometryLoaded,geomScene,&GeometryScene::updateGeometry);
@@ -111,12 +112,14 @@ void GeometryViewer::sourceShow()
 
 void GeometryViewer::tracerStart()
 {
-    if (source->getIsSet()){
-        //qDebug()<<"if";
-        //qDebug()<<geomModel->objects.first()->getPoints().count();
-        tracer->trace(*geomModel->objects.first(),*source);
-
+    if (source->getIsSet() && geomModel->objects.count()>0){
+        //qDebug()<<"viewer countS"<<geomModel->objects.count();
+        tracer->projectSource(*geomModel->objects.last(),*source);
+        //qDebug()<<"wegiht"<<tracer->rays.first().getWeight();
+        emit geometryTraced(tracer->rays);
     }
+    else
+        qDebug()<<"source is not set or geometry is empty";
 }
 
 void GeometryViewer::showTracedRays()

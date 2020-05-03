@@ -31,6 +31,7 @@ public:
     //!
     void computePoints();
     void computePoints2D();
+    void createAnalyticalParaboloid();
     void printControlPoints();
 
     const QVector<QVector3D> getControlPoints() const;
@@ -67,12 +68,17 @@ public:
 
     QVector<float> getPointsAndNormalsFloatVector2D() const;
 
+    QVector<QVector3D> getPointsNormals() const;
+
+    QVector<QVector3D> getPointsNormals2() const;
+
 private:
     int type = 0; // 0 - nic, 1 - curve, 2 - surface
     void computeBoundingRect();
     void computeCtrlPtsFromSpread();
     void computeNormalsFromTriangles();
     void CombinePointsAndNormals();
+    void points2d2points();
     QVector3D computeDerivative(QVector3D p,float angle);
 
     Source* m_source;
@@ -86,12 +92,15 @@ private:
     QVector<QVector3D> derivativeControlPoints;
     QVector<QVector3D> derivativePoints;
 
+    QVector<QVector3D> normalControlPoints;
+
     QVector<QVector<QVector3D> > controlPoints2D;
     QVector<QVector<QVector3D> > derivativeControlPoints2D;
     QVector<QVector<QVector3D> > points2D;
     QVector<QVector<QVector3D> > derivativePoints2D;
     QVector<QVector3D> pointsTriangle;
     QVector<QVector3D> pointsNormals;
+    QVector<QVector3D> pointsNormals2; //normals for tracing - pointsNormals have duplicated points for creation of triangles
     QVector<QVector3D> spreadPoints;
     QVector<QVector3D> derivativeSpreadPoints;
 

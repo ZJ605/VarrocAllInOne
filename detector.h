@@ -29,7 +29,7 @@ class Detector : public QWidget
     Q_OBJECT
 
 public:
-    explicit Detector(Tracer* t, QWidget *parent = nullptr);
+    explicit Detector(QWidget *parent = nullptr);
     ~Detector();
 
     struct detectorPoint {
@@ -40,7 +40,7 @@ public:
         detectorPoint(int H, int V, float inten){h = H; v = V; intensity = inten;}
     };
     void projectRaysOnDetector(QVector<Ray>& r);
-    void projectChipOnDetector(QVector<Ray>& r);
+
     QVector<Ray*> rays;
 
     cv::Mat detector;
@@ -50,10 +50,11 @@ public:
 
 signals:
     void detectorUpdated(cv::Mat m);
-
+public slots:
+    void projectChipOnDetector(const QVector<Ray>& rs);
 private:
     Ui::Detector *ui;
-    Tracer* tracer;
+    //Tracer* tracer;
     //friend class DetectorTests;
 
 
@@ -121,7 +122,6 @@ private slots:
     float rayWeightInPolygon(detectorPoint q, QVector<detectorPoint> &pole);
     void on_pshBtn_setAngle_clicked();
     void drawPlot();
-    void geometryTraced();
 
 };
 

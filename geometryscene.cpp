@@ -495,7 +495,8 @@ void GeometryScene::geometryChanged2D(BasicObject &o)
     m_shaderProgram->release();
     VAO_VBO_Object *abo = new VAO_VBO_Object(a1, b1, o);
     vao_vbo_objects.append(abo);
-    fitAllObjectsIn();
+
+    fitAllObjectsIn();    
 }
 
 void GeometryScene::sourceUpdated(QVector<float> s)

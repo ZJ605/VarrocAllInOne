@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setupLayout();
     setupToolbars();
 
+    connect(geomViewer, &GeometryViewer::geometryTraced, detector, &Detector::projectChipOnDetector);
 }
 
 MainWindow::~MainWindow()
@@ -24,12 +25,14 @@ void MainWindow::setupLayout()
 
     geomViewer = new GeometryViewer();
     const QString name = "geometry";
-    tabWidget->addTab(geomViewer,name);
+    int geomindex = tabWidget->addTab(geomViewer,name);
     this->setCentralWidget(tabWidget);
 
-    detector = new Detector(geomViewer->getTracer());
+    detector = new Detector(this);
     const QString name2 = "detector";
-    tabWidget->addTab(detector, name2);
+    int detindex = tabWidget->addTab(detector, name2);
+    tabWidget->setCurrentIndex(detindex);
+    //tabWidget->setCurrentIndex(geomindex);
 }
 
 void MainWindow::setupMenuBar()

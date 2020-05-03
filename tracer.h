@@ -9,6 +9,7 @@
 #include "basicobject.h"
 #include "source.h"
 #include "ray.h"
+
 namespace Ui {
 class Tracer;
 }
@@ -20,11 +21,6 @@ class Tracer : public QDialog
 public:
     explicit Tracer(QWidget *parent = nullptr);
     ~Tracer();
-
-    void traceZX(QVector<QVector3D>& pts, QVector<QVector3D>& derPts, Source& s, Detector& d);
-    void traceYX(QVector<QVector3D>& pts, QVector<QVector3D>& derPts, Source& s, Detector& d);
-    void trace(BasicObject& obj, Source& s, Detector& d);
-    //void trace(BasicObject& obj, Source& s);
     void projectSource(BasicObject& obj, Source& s);
 
     bool isSet;
@@ -32,6 +28,7 @@ public:
     QVector<float> getIncidentRaysVector() const;
     void setIncidentRaysVector(const QVector<float> &value);
     QVector<Ray> getReflectedRays() const;
+    void trace(BasicObject& obj, Source& s);
 
     QVector<Ray> rays;
 
@@ -39,7 +36,7 @@ signals:
     void raysTraced(QVector<float> v,QVector<float> r);
 public slots:
     void test();
-    void trace(BasicObject& o,Source& s);
+    //void trace(BasicObject& o,Source& s);
 
 private:
     Ui::Tracer *ui;
@@ -50,7 +47,7 @@ private:
     void createSourceRays(Source& s, QVector<QVector3D>& r);
     void epmtyRays();
 
-    Ray& getReflectedRay(QVector3D v, QVector3D n, Source &s);
+
 
     QVector<Ray> reflectedRays;
     QVector<float> reflectedRaysVector;

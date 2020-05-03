@@ -1,7 +1,4 @@
-#include "geometrymodel.h"
-#include "plyreader.h"
-#include "tracer.h"
-#include "source.h"
+
 #include <QObject>
 #include <QOpenGLWidget>
 #include <QWidget>
@@ -9,6 +6,11 @@
 #include <QAction>
 #include <QHBoxLayout>
 #include <QGroupBox>
+#include "geometrymodel.h"
+#include "plyreader.h"
+#include "tracer.h"
+#include "source.h"
+#include "ray.h"
 
 class GeometryScene;
 
@@ -23,6 +25,7 @@ public:
     GeometryScene *geomScene;
     Tracer* tracer;
     Source* source;
+    Detector* detector;
 
     QHBoxLayout *horLayout;
     QVBoxLayout *vertLayout;
@@ -56,7 +59,7 @@ signals:
     void sGeometryTransfromXYView();
     void sGeometryChanged();
     void sCreateParaboloid();
-
+    void geometryTraced(QVector<Ray> rs);
 
 public slots:
     void load();

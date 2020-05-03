@@ -17,29 +17,14 @@ class Source : public QDialog
 
 public:
     explicit Source(QWidget *parent = nullptr);
-    ~Source();
+    Source (QWidget *parent, float x, float z);
+    Source& operator=(const Source s);
+    ~Source() override;
 
-    Source(const Source&s);
-    Source& operator = (const Source&);
-
+    float getChipSizeX() const {return chipSizeX;}
+    float getChipSizeZ() const {return chipSizeZ;}
     bool getIsSet() const;
-    Point getSourcePosition() const;
-
-    QVector3D getSourceNormal() const;
-
-    void setSourcePosition(const Point &value);
-
-    QVector3D getSourceDirection1() const;
-    void setSourceDirection1(const QVector3D &value);
-
-    QVector3D getSourceDirection2() const;
-    void setSourceDirection2(const QVector3D &value);
-
-    void setSourceNormal(const QVector3D &value);
-
-    float getSourceSize1() const;
-
-    float getSourceSize2() const;
+    QVector3D getSourcePosition() const;
 
 signals:
     void sourceChanged(QVector<float> v);
@@ -52,17 +37,14 @@ private slots:
 private:
     Ui::Source *ui;
 
-    void generateRays();
-
+    float chipSizeX;
+    float chipSizeZ;
+    QVector3D sourcePosition;
     bool isSet = false;
 
-    Point sourcePosition;
+    void generateRays();
 
-    QVector3D sourceDirection1;
-    QVector3D sourceDirection2;    
-    QVector3D sourceNormal;
-    float sourceSize1 = 0;
-    float sourceSize2 = 0;
+    //Point sourcePosition;
 
     QVector<float> sourceFloatVector;
     QVector<Ray> sourceRays;

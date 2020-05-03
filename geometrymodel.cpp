@@ -73,10 +73,13 @@ void GeometryModel::createParaboloid()
     BasicObject *bo = new BasicObject();
     bo->createParaboloidControlPoints();
 
-    bo->computePoints2D();
+    //bo->computePoints2D();
+    bo->createAnalyticalParaboloid();
     objects.append(bo);
-    //qDebug()<<"count in model"<<bo->getPointsFloatVector2D().count();
-    emit geometryChanged(*bo);
+    qDebug()<<"points geom"<<bo->getPoints().count();
+    qDebug()<<"normals geom"<<bo->getPointsNormals2().count();
+    emit geometryChanged(*objects.last());
+    //qDebug()<<"gm par";
 }
 
 void GeometryModel::fromListToVec()

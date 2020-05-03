@@ -18,54 +18,58 @@ void Tracer::test()
     qDebug()<<"OK tracer show";
 }
 
-void Tracer::trace(BasicObject &o, Source &s)
+void Tracer::projectSource(BasicObject &obj, Source &s)
 {
-    if (s.getIsSet()){
-        QVector3D sourceNormal = s.getSourceNormal();
-        for (int i = 1;i<(o.getPoints().count()-1);i++) {
-            //QVector3D normalPom = o.getPoints().at(i+1)-o.getPoints().at(i-1);
-            QVector3D normalPom = o.getDerivativePoints().at(i);
-            QVector3D normal;
-            normal.setX(-normalPom.y());
-            normal.setY(normalPom.x());
-            normal.setZ(0.0);
+    //qDebug()<<"in tracer"<<obj.getPoints().count();
+    QVector3D sourceNormal = QVector3D(0,-1,0);
+    QVector<QVector3D> sourceCorners;
+    sourceCorners.append(QVector3D(s.getChipSizeX()/2,0,s.getChipSizeZ()/2));
+    sourceCorners.append(QVector3D(s.getChipSizeX()/2,0,-s.getChipSizeZ()/2));
+    sourceCorners.append(QVector3D(-s.getChipSizeX()/2,0,s.getChipSizeZ()/2));
+    sourceCorners.append(QVector3D(-s.getChipSizeX()/2,0,-s.getChipSizeZ()/2));
+
+    qDebug()<<"points"<<obj.getPoints().count();
+    qDebug()<<"normalss"<<obj.getPointsNormals2().count();
+
+    for (int i = 1; i < (obj.getPoints().count()-1);i++) {
+        foreach (QVector3D r, sourceCorners){
+            QVector3D incident = obj.getPoints().at(i) - r;
+            double length = incident.length();
+            incident = incident.normalized();
+            //QVector3D der = obj.getDerivativePoints().at(i);
+            QVector3D normal = obj.getPointsNormals2()[i];
             normal = normal.normalized();
-            Ray r = getReflectedRay(o.getPoints().at(i),normal,s);
-            reflectedRays.append(r);
+            QVector3D reflected = incident - 2*(QVector3D::dotProduct(incident, normal))*normal;
+            reflected = reflected.normalized();
+            Ray ry(obj.getPoints().at(i),reflected);
+            float angle = qAbs(QVector3D::dotProduct(QVector3D(0,0,1),incident));
+            ry.setWeight(angle);
+            rays.append(ry);
+            //qDebug()<<"ray"<<ry.getPosition();
         }
     }
-    emit raysTraced(getIncidentRaysVector(),getReflectedRaysVector());
+    normalizeFlux();
 }
 
-Ray& Tracer::getReflectedRay(QVector3D v, QVector3D n, Source &s)
+void Tracer::emptyRays()
 {
-    QVector3D incident = v - s.getSourcePosition().getPoint();
-    incident = incident.normalized();
-    incidentRaysVector.append(s.getSourcePosition().getPoint().x());
-    incidentRaysVector.append(s.getSourcePosition().getPoint().y());
-    incidentRaysVector.append(s.getSourcePosition().getPoint().z());
-    incidentRaysVector.append(v.x()+s.getSourcePosition().getPoint().x());
-    incidentRaysVector.append(v.y()+s.getSourcePosition().getPoint().y());
-    incidentRaysVector.append(v.z()+s.getSourcePosition().getPoint().z());
-    Ray newIncidentRay(s.getSourcePosition().getPoint(),incident);
-    newIncidentRay.getDirection().normalize();
-    incidentRays.append(newIncidentRay);
+    auto it = rays.begin();
+    while (it!=rays.end()){
+        rays.erase(it);
+        ++it;
+    }
+}
 
-    QVector3D reflected = incident - 2*(QVector3D::dotProduct(incident,n))*n;
-    reflected = reflected.normalized();
-    //QVector3D reflected = n;
-    //qDebug()<<"dot"<<2*(QVector3D::dotProduct(incident,n));
-    reflectedRaysVector.append(v.x());
-    reflectedRaysVector.append(v.y());
-    reflectedRaysVector.append(v.z());
-
-    reflectedRaysVector.append(reflected.x()+v.x());
-    reflectedRaysVector.append(reflected.y()+v.y());
-    reflectedRaysVector.append(reflected.z()+v.z());
-    Ray* newRay = new Ray(v,reflected);
-    newRay->setWeight(QVector3D::crossProduct(s.getSourceNormal(),incident).length());
-
-    return *newRay;
+void Tracer::normalizeFlux()
+{
+    float sum = 0;
+    foreach(Ray r,rays){
+        sum += r.getWeight();
+    }
+    for (int i =0;i<rays.count();i++){
+        float p = rays[i].getWeight();
+        rays[i].setWeight(p/sum);
+    }
 }
 
 QVector<Ray> Tracer::getReflectedRays() const

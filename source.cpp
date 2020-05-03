@@ -1,11 +1,15 @@
 #include "source.h"
 #include "ui_source.h"
 
-Source::Source(QWidget *parent) :
-    sourcePosition(Point()),sourceDirection1(QVector3D(0,0,0)),sourceDirection2(QVector3D(0,0,0)),QDialog(parent),
-    ui(new Ui::Source)
+Source::Source(QWidget *parent) : QDialog(parent), ui(new Ui::Source)
 {
     ui->setupUi(this);
+}
+
+Source::Source(QWidget *parent, float x, float z) : QDialog(parent), ui(new Ui::Source), chipSizeX(x), chipSizeZ(z)
+{
+    ui->setupUi(this);
+    isSet = true;
 }
 
 Source::~Source()
@@ -13,29 +17,9 @@ Source::~Source()
     delete ui;
 }
 
-Source::Source(const Source &s)
-{
-    sourcePosition = s.sourcePosition;
-    sourceSize1 = s.sourceSize1;
-    sourceSize2 = s.sourceSize2;
-    sourceNormal = s.sourceNormal;
-    sourceDirection1 = s.sourceDirection1;
-    sourceDirection2 = s.sourceDirection2;
-}
-
-Source &Source::operator =(const Source &s)
-{
-    sourcePosition = s.sourcePosition;
-    sourceSize1 = s.sourceSize1;
-    sourceSize2 = s.sourceSize2;
-    sourceNormal = s.sourceNormal;
-    sourceDirection1 = s.sourceDirection1;
-    sourceDirection2 = s.sourceDirection2;
-    return *this;
-}
-
 void Source::on_btn_OK_clicked()
 {
+    /*
     sourcePosition.setPoint(QVector3D(ui->ln_PosX->text().toFloat(),ui->ln_PosY->text().toFloat(),ui->ln_PosZ->text().toFloat()));
     QString dir1=ui->ln_Dir1->text();
     if (dir1.split(" ").count()>2){
@@ -94,15 +78,18 @@ void Source::on_btn_OK_clicked()
     emit sourceChanged(sourceFloatVector);
 
     close();
+    */
 }
 
 void Source::showEvent(QShowEvent *)
 {
+    /*
     ui->ln_PosX->text()= QString::number(sourcePosition.getPoint().x());
     ui->ln_PosY->text()= QString::number(sourcePosition.getPoint().y());
     ui->ln_PosZ->text()= QString::number(sourcePosition.getPoint().z());
     ui->ln_Dir1->text()=QString::number(sourceDirection1.x())+QString::number(sourceDirection1.y())+QString::number(sourceDirection1.z());
     ui->ln_Dir2->text()=QString::number(sourceDirection2.x())+QString::number(sourceDirection2.y())+QString::number(sourceDirection2.z());
+    */
 }
 
 void Source::generateRays()
@@ -111,56 +98,6 @@ void Source::generateRays()
     for (int i=0;i<rayNmr;i++) {
 
     }
-}
-
-float Source::getSourceSize2() const
-{
-    return sourceSize2;
-}
-
-float Source::getSourceSize1() const
-{
-    return sourceSize1;
-}
-
-void Source::setSourceNormal(const QVector3D &value)
-{
-    sourceNormal = value;
-}
-
-QVector3D Source::getSourceDirection2() const
-{
-    return sourceDirection2;
-}
-
-void Source::setSourceDirection2(const QVector3D &value)
-{
-    sourceDirection2 = value;
-}
-
-QVector3D Source::getSourceDirection1() const
-{
-    return sourceDirection1;
-}
-
-void Source::setSourceDirection1(const QVector3D &value)
-{
-    sourceDirection1 = value;
-}
-
-void Source::setSourcePosition(const Point &value)
-{
-    sourcePosition = value;
-}
-
-QVector3D Source::getSourceNormal() const
-{
-    return sourceNormal;
-}
-
-Point Source::getSourcePosition() const
-{
-    return sourcePosition;
 }
 
 bool Source::getIsSet() const
