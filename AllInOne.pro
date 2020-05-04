@@ -91,6 +91,8 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../library/build-Nurbs2
 INCLUDEPATH += $$PWD/../library/build-Nurbs2D-Desktop_Qt_5_12_0_MinGW_64_bit-Debug/debug
 DEPENDPATH += $$PWD/../library/build-Nurbs2D-Desktop_Qt_5_12_0_MinGW_64_bit-Debug/debug
 
+INCLUDEPATH += $$PWD/../../../Program/C_Cxx/library/Nurbs2D
+
 INCLUDEPATH += C:\Users\Ray\Programy\opencv\release\install\include
 
 win32: LIBS += -L$$PWD/../../../Programy/opencv/release/install/x64/mingw/lib/ -llibopencv_calib3d420.dll

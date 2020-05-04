@@ -454,10 +454,6 @@ void GeometryScene::geometryChanged(BasicObject &o)
 void GeometryScene::geometryChanged2D(BasicObject &o)
 {
     makeCurrent();
-    for (int i = 3; i<o.getPointsAndNormalsFloatVector2D().count();i=i+6){
-        //qDebug()<<o.getPointsAndNormalsFloatVector2D()[i]<<o.getPointsAndNormalsFloatVector2D()[i+1]<<o.getPointsAndNormalsFloatVector2D()[i+2];
-    }
-
     QOpenGLVertexArrayObject *a1 = new QOpenGLVertexArrayObject();
     QOpenGLBuffer *b1 = new QOpenGLBuffer();
     //QOpenGLVertexArrayObject *da1 = new QOpenGLVertexArrayObject();
@@ -470,7 +466,6 @@ void GeometryScene::geometryChanged2D(BasicObject &o)
     b1->create();
     b1->bind();
     b1->setUsagePattern(QOpenGLBuffer::DynamicDraw);
-
     b1->allocate(&o.getPointsAndNormalsFloatVector2D().first(),sizeof (float)*o.getPointsAndNormalsFloatVector2D().count());
     m_shaderProgram->enableAttributeArray(0);
     m_shaderProgram->setAttributeBuffer(0,GL_FLOAT,0,3,24);
@@ -496,7 +491,8 @@ void GeometryScene::geometryChanged2D(BasicObject &o)
     VAO_VBO_Object *abo = new VAO_VBO_Object(a1, b1, o);
     vao_vbo_objects.append(abo);
 
-    fitAllObjectsIn();    
+    fitAllObjectsIn();
+
 }
 
 void GeometryScene::sourceUpdated(QVector<float> s)

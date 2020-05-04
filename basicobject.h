@@ -78,7 +78,7 @@ private:
     void computeCtrlPtsFromSpread();
     void computeNormalsFromTriangles();
     void CombinePointsAndNormals();
-    void points2d2points();
+    void vector2d2vector(const QVector<QVector<QVector3D> >& array, QVector<QVector3D>& vec);
     QVector3D computeDerivative(QVector3D p,float angle);
 
     Source* m_source;
@@ -98,9 +98,10 @@ private:
     QVector<QVector<QVector3D> > derivativeControlPoints2D;
     QVector<QVector<QVector3D> > points2D;
     QVector<QVector<QVector3D> > derivativePoints2D;
+    QVector<QVector<QVector3D> > normals2D;
     QVector<QVector3D> pointsTriangle;
-    QVector<QVector3D> pointsNormals;
-    QVector<QVector3D> pointsNormals2; //normals for tracing - pointsNormals have duplicated points for creation of triangles
+    QVector<QVector3D> pointsNormals; //normals for every triangle - for shaders, here are duplicated points
+    QVector<QVector3D> pointsNormals2; //normals for tracing
     QVector<QVector3D> spreadPoints;
     QVector<QVector3D> derivativeSpreadPoints;
 

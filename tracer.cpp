@@ -28,24 +28,23 @@ void Tracer::projectSource(BasicObject &obj, Source &s)
     sourceCorners.append(QVector3D(-s.getChipSizeX()/2,0,s.getChipSizeZ()/2));
     sourceCorners.append(QVector3D(-s.getChipSizeX()/2,0,-s.getChipSizeZ()/2));
 
-    qDebug()<<"points"<<obj.getPoints().count();
-    qDebug()<<"normalss"<<obj.getPointsNormals2().count();
+    //qDebug()<<"points"<<obj.getPoints().count();
+    //qDebug()<<"normalss"<<obj.getPointsNormals2().count();
 
-    for (int i = 1; i < (obj.getPoints().count()-1);i++) {
+    for (int i = 0; i < (obj.getPoints().count());i++) {
         foreach (QVector3D r, sourceCorners){
             QVector3D incident = obj.getPoints().at(i) - r;
-            double length = incident.length();
             incident = incident.normalized();
-            //QVector3D der = obj.getDerivativePoints().at(i);
             QVector3D normal = obj.getPointsNormals2()[i];
             normal = normal.normalized();
             QVector3D reflected = incident - 2*(QVector3D::dotProduct(incident, normal))*normal;
             reflected = reflected.normalized();
             Ray ry(obj.getPoints().at(i),reflected);
             float angle = qAbs(QVector3D::dotProduct(QVector3D(0,0,1),incident));
+            //qDebug()<<"angle"<<angle;
             ry.setWeight(angle);
             rays.append(ry);
-            //qDebug()<<"ray"<<ry.getPosition();
+            qDebug()<<"ray pos"<<ry.getPosition()<<"ray dir"<<ry.getDirection()<<"i"<<i;
         }
     }
     normalizeFlux();

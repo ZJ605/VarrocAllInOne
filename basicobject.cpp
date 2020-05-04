@@ -39,22 +39,23 @@ void BasicObject::computePoints2D()
 {
     Nurbs2D nurbs2d;
     nurbs2d.setDegree(3,3);
-    nurbs2d.setRefine(5,5);
+    nurbs2d.setRefine(10,10);
     nurbs2d.setControlPoints(controlPoints2D);
     nurbs2d.computeKnots();
     nurbs2d.computePoints();
     points2D = nurbs2d.getPoints();
-
-    points2d2points();
-
+    normals2D = nurbs2d.getNormals();
+    vector2d2vector(points2D, points);
+    vector2d2vector(normals2D, pointsNormals2);
+    //qDebug()<<"points bo"<<points.first();
+    //qDebug()<<"normals bo"<<pointsNormals2.first();
+    //creation of triangles and normals for geometry display
     pointsTriangle = nurbs2d.getPointsVectorTriangles();
-
     computeNormalsFromTriangles();
     createVectorFromPoints(pointsTriangle,pointsFloatVector2D);
     createVectorFromPoints(pointsNormals, pointsNormalsFloatVector2D);
     CombinePointsAndNormals();
     computeBoundingRect();
-
 }
 
 void BasicObject::createAnalyticalParaboloid()
@@ -80,9 +81,9 @@ void BasicObject::createAnalyticalParaboloid()
         }
         points2D.append(*coordU);
     }
-    qDebug()<<"points"<<points.count();
-    qDebug()<<"normals"<<pointsNormals2.count();
-    points2d2points();
+    //qDebug()<<"points"<<points.count();
+    //qDebug()<<"normals"<<pointsNormals2.count();
+    vector2d2vector(points2D, points);
     int h = points2D[0].count();
     int v = points2D.count();
 
@@ -102,8 +103,8 @@ void BasicObject::createAnalyticalParaboloid()
     CombinePointsAndNormals();
     computeBoundingRect();
     type = 2;
-    qDebug()<<"points"<<points.count();
-    qDebug()<<"normals"<<pointsNormals2.count();
+    //qDebug()<<"points"<<points.count();
+    //qDebug()<<"normals"<<pointsNormals2.count();
 }
 
 void BasicObject::printControlPoints()
@@ -240,11 +241,11 @@ void BasicObject::CombinePointsAndNormals()
     //qDebug()<<"points and normal count"<<pointsAndNormalsFloatVector2D.count();
 }
 
-void BasicObject::points2d2points()
+void BasicObject::vector2d2vector(const QVector<QVector<QVector3D> >& array, QVector<QVector3D>& vec)
 {
-    for (int i = 0; i<points2D.count(); i++)
-        for (int j = 0; j < points2D[0].count(); j++){
-            points.append(points2D[i][j]);
+    for (int i = 0; i<array.count(); i++)
+        for (int j = 0; j < array[0].count(); j++){
+            vec.append(array[i][j]);
         }
 }
 
@@ -380,6 +381,7 @@ void BasicObject::createParaboloidControlPoints()
     }
     //qDebug()<<"par"<<controlPoints2D.count()*controlPoints2D[0].count();
     type = 2;
+    //computePoints2D();
 }
 
 QVector<float> BasicObject::getDerivativePointsFloatVector() const

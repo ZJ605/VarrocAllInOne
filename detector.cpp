@@ -148,7 +148,7 @@ void Detector::projectChipOnDetector(const QVector<Ray> &rs)
     //qDebug()<<"max"<<max;
 
     max=200.0f/max;
-    //qDebug()<<"max"<<max;
+    qDebug()<<"max"<<max;
     /*
     for (int i = 0;i<detectorV.count();i++) {
         for (int j = 0;j<detectorV[0].count();j++) {
@@ -169,8 +169,8 @@ void Detector::projectChipOnDetector(const QVector<Ray> &rs)
 
     pixmap.setPixmap(QPixmap::fromImage(putImage(detector)));
     ui->grfVw->fitInView(&pixmap,Qt::KeepAspectRatio);
-    //qDebug()<<"rays count"<<rs.count();
-    //qDebug()<<"rays out"<<outRays;
+    qDebug()<<"rays count"<<rs.count();
+    qDebug()<<"rays out"<<outRays;
     this->update();
 }
 
