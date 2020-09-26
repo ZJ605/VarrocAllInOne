@@ -47,6 +47,7 @@ private:
     //calculates coordinates of point given by spread, based on previous point
     QVector<QVector3D> m_spreadPoints;
     QVector<QVector3D> m_points;
+    QVector<QVector<QVector3D> > controlPoints;
 
     Source *m_source;
     bool sourceIsSet = false;

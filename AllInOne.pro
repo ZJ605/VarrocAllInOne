@@ -32,8 +32,12 @@ SOURCES += \
         geometrymodel.cpp \
         geometryscene.cpp \
         geometryviewer.cpp \
+        layer.cpp \
         main.cpp \
         mainwindow.cpp \
+        matrix.cpp \
+        neuralnetwork.cpp \
+        neuron.cpp \
         nurbs.cpp \
         plyreader.cpp \
         point.cpp \
@@ -51,7 +55,11 @@ HEADERS += \
         geometrymodel.h \
         geometryscene.h \
         geometryviewer.h \
+        layer.h \
         mainwindow.h \
+        matrix.h \
+        neuralnetwork.h \
+        neuron.h \
         nurbs.h \
         plyreader.h \
         point.h \

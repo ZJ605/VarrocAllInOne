@@ -39,7 +39,7 @@ void BasicObject::computePoints2D()
 {
     Nurbs2D nurbs2d;
     nurbs2d.setDegree(3,3);
-    nurbs2d.setRefine(10,10);
+    nurbs2d.setRefine(50,50);
     nurbs2d.setControlPoints(controlPoints2D);
     nurbs2d.computeKnots();
     nurbs2d.computePoints();
@@ -62,11 +62,11 @@ void BasicObject::createAnalyticalParaboloid()
 {
     auto paraboloid = [](double y, double z)->double{return (y*y+z*z)/(4*15)-15;};
     auto derivativeParaboloid = [](double yz)->double{return (yz/(2*15));};
-    int countU = 11;
-    int countV = 21;
+    int countU = 21;
+    int countV = 41;
     double stepU = 1;
-    double stepV = 2;
-    double zstart = -2;
+    double stepV = 1;
+    double zstart = -10;
     double ystart = -50;
     for (int i = 0; i < countV; i++){
         QVector<QVector3D>* coordU = new QVector<QVector3D>();
@@ -220,11 +220,8 @@ void BasicObject::computeNormalsFromTriangles()
         cross = cross.normalized();
         pointsNormals.append(cross);
         pointsNormals.append(cross);
-        pointsNormals.append(cross);
-        //pointsNormals2.append(cross);
-        //qDebug()<<"normal"<<cross;
-    }
-    //qDebug()<<"ros triagnels count"<<pointsNormals.count();
+        pointsNormals.append(cross);        
+    }    
 }
 
 void BasicObject::CombinePointsAndNormals()
@@ -364,11 +361,11 @@ void BasicObject::createTestingPoint()
 void BasicObject::createParaboloidControlPoints()
 {
     auto paraboloid = [](double y, double z)->double{return (y*y+z*z)/(4*15)-15;};
-    int countU = 11;
-    int countV = 21;
+    int countU = 21;
+    int countV = 41;
     double stepU = 1;
-    double stepV = 2;
-    double zstart = -2;
+    double stepV = 1;
+    double zstart = -10;
     double ystart = -50;
     for (int i = 0; i < countV; i++){
         QVector<QVector3D>* coordU = new QVector<QVector3D>();

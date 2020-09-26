@@ -22,7 +22,7 @@ GeometryViewer::GeometryViewer(QWidget* parent):QWidget (parent)
 
     connect(this, &GeometryViewer::geometryLoaded,geomScene,&GeometryScene::updateGeometry);
     connect(this, &GeometryViewer::sGeometryTransfromXYView,geomScene,&GeometryScene::geometryTransformXYView);
-    //connect(this, &GeometryViewer::sGeometryChanged, geomModel, &GeometryModel::showDialog);
+    connect(this, &GeometryViewer::sGeometryChanged, geomModel, &GeometryModel::showDialog);
     connect(this, &GeometryViewer::sCreateParaboloid, geomModel, &GeometryModel::createParaboloid);
     connect(geomModel,&GeometryModel::geometryChanged,geomScene,&GeometryScene::geometryChanged2D);
     connect(source,&Source::sourceChanged,geomScene,&GeometryScene::sourceUpdated);
@@ -180,6 +180,7 @@ void GeometryViewer::createLayout()
     ActCreate->setIconText("FFFFF");
     QIcon iconCreate(":/GCreate.PNG");
     ActCreate->setIcon(iconCreate);
+    //connect(ActCreate,SIGNAL(triggered()),this,SLOT(create()));
     connect(ActCreate,SIGNAL(triggered()),this,SLOT(createParaboloid()));
     geomToolBar->addAction(ActCreate);
 

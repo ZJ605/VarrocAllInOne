@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>32</x>
@@ -112,7 +112,7 @@
         <item>
          <widget class="QLabel" name="lbl_points">
           <property name="text">
-           <string>points</string>
+           <string>radiuses</string>
           </property>
          </widget>
         </item>

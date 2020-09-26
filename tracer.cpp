@@ -44,7 +44,7 @@ void Tracer::projectSource(BasicObject &obj, Source &s)
             //qDebug()<<"angle"<<angle;
             ry.setWeight(angle);
             rays.append(ry);
-            qDebug()<<"ray pos"<<ry.getPosition()<<"ray dir"<<ry.getDirection()<<"i"<<i;
+            //qDebug()<<"ray pos"<<ry.getPosition()<<"ray dir"<<ry.getDirection()<<"i"<<i;
         }
     }
     normalizeFlux();

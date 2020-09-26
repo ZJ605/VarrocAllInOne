@@ -40,7 +40,7 @@ void GeometryModel::create2degSpline()
 
 void GeometryModel::showDialog()
 {
-    GeometryDialog *gd = new GeometryDialog();
+    GeometryDialog* gd = new GeometryDialog();
     connect(gd,&GeometryDialog::pointAndSourceRead,this,&GeometryModel::readPointsAndSourceFromDialog);
     gd->show();
 }
@@ -72,7 +72,6 @@ void GeometryModel::createParaboloid()
 {
     BasicObject *bo = new BasicObject();
     bo->createParaboloidControlPoints();
-
     bo->computePoints2D();
     //bo->createAnalyticalParaboloid();
 
